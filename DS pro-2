@@ -1,0 +1,42 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Sample sales data
+data = {
+    "Date": pd.date_range(start="2024-01-01", periods=6, freq="M"),
+    "Sales": [1000, 1200, 1500, 1700, 2000, 2300],
+    "Category": ["Electronics", "Clothing", "Grocery",
+                 "Electronics", "Clothing", "Grocery"]
+}
+
+df = pd.DataFrame(data)
+df["Date"] = pd.to_datetime(df["Date"])
+plt.plot(df["Date"], df["Sales"], marker='o')
+plt.xlabel("Date")
+plt.ylabel("Sales")
+plt.title("Monthly Sales Over Time")
+plt.savefig("monthly_sales.png")
+plt.show()
+df.set_index("Date", inplace=True)
+
+quarterly_sales = df["Sales"].resample("Q").sum()
+
+quarterly_sales.plot(marker='o')
+plt.xlabel("Quarter")
+plt.ylabel("Total Sales")
+plt.title("Quarterly Sales")
+plt.savefig("quarterly_sales.png")
+plt.show()
+category_sales = df.groupby("Category")["Sales"].sum()
+
+category_sales.plot(kind="bar")
+plt.xlabel("Category")
+plt.ylabel("Total Sales")
+plt.title("Sales by Category")
+plt.savefig("category_sales.png")
+plt.show()
+category_sales.plot(kind="pie", autopct="%1.1f%%")
+plt.title("Category-wise Sales Share")
+plt.ylabel("")
+plt.savefig("category_share.png")
+plt.show()
